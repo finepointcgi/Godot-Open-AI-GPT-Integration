@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://dkntwmrx07aeo"]
+
+[node name="Window" type="Window"]
+initial_position = 2
+title = "GPT Settings"
+size = Vector2i(529, 183)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="APIKEY" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "API Key"
+
+[node name="Max Tokens" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Max Tokens"
+
+[node name="Temperature" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Temperature"
+
+[node name="Engine" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Engine"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="APIKey" type="LineEdit" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="MaxTokens" type="LineEdit" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "1024"
+
+[node name="Temperature" type="LineEdit" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "0.5"
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "Davanchi Text"
+popup/item_0/id = 0
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -17.88
+offset_right = 1.573
+offset_bottom = -17.88
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Button" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "OK"
