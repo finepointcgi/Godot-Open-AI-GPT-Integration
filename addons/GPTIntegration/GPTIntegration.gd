@@ -12,7 +12,7 @@ var apiKey = ""
 var max_tokens = 1024
 var temperature = 0.5
 var url = "https://api.openai.com/v1/completions"
-var headers = ["Content-Type: application/json", "Authorization: Bearer " + apiKey]
+var headers : Array
 var engine = "text-davinachi-003"
 var chatDock
 var httpRequest
@@ -20,6 +20,9 @@ var currentMode
 var cursorPos
 var codeEditor
 var settingsMenu
+
+func update_headers():
+	headers = ["Content-Type: application/json", "Authorization: Bearer " + apiKey]
 
 func _enter_tree():
 	chatDock = preload("res://addons/GPTIntegration/Chat.tscn").instantiate()
@@ -32,6 +35,7 @@ func _enter_tree():
 	# Initialization of the plugin goes here.
 	add_tool_menu_item("GPT Chat", onShowSettings)
 	loadSettings()
+	update_headers()
 	pass
 
 func onShowSettings():
@@ -43,10 +47,12 @@ func onShowSettings():
 	settingsMenu.popup()
 	
 func onSettingsButtonDown():
+	var index : int
 	apiKey = settingsMenu.get_node("HBoxContainer/VBoxContainer2/APIKey").text
+	update_headers()
 	max_tokens = int(settingsMenu.get_node("HBoxContainer/VBoxContainer2/MaxTokens").text)
 	temperature = float(settingsMenu.get_node("HBoxContainer/VBoxContainer2/Temperature").text)
-	var index = settingsMenu.get_node("HBoxContainer/VBoxContainer2/OptionsButton").selected
+	index = settingsMenu.get_node("HBoxContainer/VBoxContainer2/OptionButton").selected
 	
 	if index == 0:
 		engine = "text-davinchi-003"
@@ -59,12 +65,12 @@ func settingsMenuClose():
 
 func setSettings(apikey, maxtokens, temp, engine):
 	settingsMenu.get_node("HBoxContainer/VBoxContainer2/APIKey").text = apikey
-	settingsMenu.get_node("HBoxContainer/VBoxContainer2/MaxTokens").text = maxtokens
-	settingsMenu.get_node("HBoxContainer/VBoxContainer2/Temperature").text = temp
+	settingsMenu.get_node("HBoxContainer/VBoxContainer2/MaxTokens").text = var_to_str(maxtokens)
+	settingsMenu.get_node("HBoxContainer/VBoxContainer2/Temperature").text = var_to_str(temp)
 	var id = 0
 	if engine == "text-davinchi-003":
 		id = 0
-	settingsMenu.get_node("HBoxContainer/VBoxContainer2/OptionsButton").select(id)
+	settingsMenu.get_node("HBoxContainer/VBoxContainer2/OptionButton").selected = id
 
 func _exit_tree():
 	# Clean-up of the plugin goes here.
@@ -101,7 +107,7 @@ func CallGPT(prompt):
 	
 func onActionButtonDown():
 	currentMode = modes.Action
-	CallGPT("Code this for Godot " + GetSelectedCode())
+	CallGPT("Code the following prompt in GDscript for the Godot game engine: " + GetSelectedCode())
 	
 func onHelpButtonDown():
 	currentMode = modes.Help
@@ -112,7 +118,7 @@ func onHelpButtonDown():
 	
 func onSummaryButtonDown():
 	currentMode = modes.Summarise
-	CallGPT("Summarize this GDScript Code " + GetSelectedCode())
+	CallGPT("Summarize this GDScript Code: " + GetSelectedCode())
 	print("onSummaryButtonDown Pressed")
 
 
