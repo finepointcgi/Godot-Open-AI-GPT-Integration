@@ -94,7 +94,6 @@ func onChatButtonDown():
 		CallGPT(prompt)
 		
 func CallGPT(prompt):
-	print(headers)
 	var body = JSON.new().stringify({
 		"prompt": prompt,
 		"temperature": temperature,
