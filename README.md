@@ -37,3 +37,4 @@ The chatting feature is useful to chat with GPT
 * Type some words into the chat box and click chat and it will reply!
 
 ![image](https://user-images.githubusercontent.com/12012300/228557059-d3cad7da-f6aa-49bc-b272-3b7339130a7f.png)
+![image](https://user-images.githubusercontent.com/12012300/228563907-987573c5-2fdf-410b-ba3f-55a6b16eeb8d.png)
