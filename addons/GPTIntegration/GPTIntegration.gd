@@ -44,6 +44,7 @@ func on_show_settings():
 	
 func on_settings_button_down():
 	api_key = settings_menu.get_node("HBoxContainer/VBoxContainer2/APIKey").text
+	
 	max_tokens = int(settings_menu.get_node("HBoxContainer/VBoxContainer2/MaxTokens").text)
 	temperature = float(settings_menu.get_node("HBoxContainer/VBoxContainer2/Temperature").text)
 	var index = settings_menu.get_node("HBoxContainer/VBoxContainer2/OptionButton").selected
@@ -121,7 +122,7 @@ func call_GPT(prompt):
 		"max_tokens": max_tokens,
 		"model": "text-davinci-003"
 	})
-	var error = http_request.request(url, headers, HTTPClient.METHOD_POST, body)
+	var error = http_request.request(url, ["Content-Type: application/json", "Authorization: Bearer " + api_key], HTTPClient.METHOD_POST, body)
 	
 	if error != OK:
 		push_error("Something Went Wrong!")
@@ -140,7 +141,7 @@ func _on_help_button_down():
 func _on_summary_button_down():
 	current_mode = modes.Summarise
 	call_GPT("Summarize this GDScript Code " + get_selected_code())
-	print("_on_summary_button_down Pressed")
+	
 
 
 # This GDScript code is used to handle the response from
