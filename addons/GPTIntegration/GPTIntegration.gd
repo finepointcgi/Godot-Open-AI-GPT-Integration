@@ -24,6 +24,7 @@ var code_editor
 var settings_menu
 
 func _enter_tree():
+	printt('_enter_tree')
 	chat_dock = preload("res://addons/GPTIntegration/Chat.tscn").instantiate()
 	add_control_to_dock(EditorPlugin.DOCK_SLOT_LEFT_UR, chat_dock)
 	
@@ -128,7 +129,7 @@ func call_GPT(prompt):
 	
 	if error != OK:
 		push_error("Something Went Wrong!")
-	
+
 func _on_action_button_down():
 	current_mode = modes.Action
 	call_GPT("Code this for Godot " + get_selected_code())
