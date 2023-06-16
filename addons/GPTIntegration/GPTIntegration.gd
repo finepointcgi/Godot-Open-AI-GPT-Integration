@@ -17,13 +17,14 @@ var url = "https://api.openai.com/v1/completions"
 var headers = ["Content-Type: application/json", "Authorization: Bearer " + api_key]
 var engine = "text-davinachi-003"
 var chat_dock
-var http_request
+var http_request :HTTPRequest
 var current_mode
 var cursor_pos
 var code_editor
 var settings_menu
 
 func _enter_tree():
+	printt('_enter_tree')
 	chat_dock = preload("res://addons/GPTIntegration/Chat.tscn").instantiate()
 	add_control_to_dock(EditorPlugin.DOCK_SLOT_LEFT_UR, chat_dock)
 	
@@ -128,7 +129,7 @@ func call_GPT(prompt):
 	
 	if error != OK:
 		push_error("Something Went Wrong!")
-	
+
 func _on_action_button_down():
 	current_mode = modes.Action
 	call_GPT("Code this for Godot " + get_selected_code())
@@ -155,10 +156,21 @@ func _on_summary_button_down():
 # with each line having a maximum length of 50 characters
 # and each line starting with a "#".
 func _on_request_completed(result, responseCode, headers, body):
+	printt(result, responseCode, headers, body)
 	var json = JSON.new()
-	json.parse(body.get_string_from_utf8())
+	var parse_result = json.parse(body.get_string_from_utf8())
+	if parse_result:
+		printerr(parse_result)
+		return
 	var response = json.get_data()
-	print(response)
+	if response is Dictionary:
+		printt("Response", response)
+		if response.has("error"):
+			printt("Error", response['error'])
+			return
+	else:
+		printt("Response is not a Dictionary", headers)
+		return
 	
 	var newStr = response.choices[0].text
 	if current_mode == modes.Chat:
