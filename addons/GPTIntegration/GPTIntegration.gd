@@ -1,6 +1,8 @@
 @tool
 extends EditorPlugin
 
+const MySettings:StringName = "res://addons/GPTIntegration/settings.json"
+
 enum modes {
 	Action, 
 	Summarise,
@@ -211,7 +213,7 @@ func save_settings():
 	}
 	print(data)
 	var jsonStr = JSON.stringify(data)
-	var file = FileAccess.open("res://addons/GPTIntegration/settings.json",FileAccess.WRITE)
+	var file = FileAccess.open(MySettings, FileAccess.WRITE)
 	
 	file.store_string(jsonStr)
 	file.close()
@@ -220,7 +222,14 @@ func save_settings():
 # from it, and assigns the values to variables. The variables
 # are api_key, max_tokens, temperature, and engine.
 func load_settings():
-	var file = FileAccess.open("res://addons/GPTIntegration/settings.json",FileAccess.READ)
+	if not FileAccess.file_exists(MySettings):
+		save_settings()
+
+	var file = FileAccess.open(MySettings, FileAccess.READ)
+	if not file:
+		printerr("Unable to create", MySettings, error_string(ERR_CANT_CREATE))
+		print_stack()
+		return
 
 	var jsonStr = file.get_as_text()
 	file.close()
