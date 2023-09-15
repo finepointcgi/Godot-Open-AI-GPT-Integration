@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dkntwmrx07aeo"]
 
 [node name="Window" type="Window"]
-initial_position = 2
 title = "GPT Settings"
+initial_position = 2
 size = Vector2i(529, 183)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -49,20 +49,12 @@ text = "0.5"
 
 [node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer2"]
 layout_mode = 2
-item_count = 6
+item_count = 2
 selected = 0
-popup/item_0/text = "Davinchi Text"
+popup/item_0/text = "GPT-4"
 popup/item_0/id = 0
-popup/item_1/text = "Davinchi Code"
+popup/item_1/text = "GPT3.5"
 popup/item_1/id = 1
-popup/item_2/text = "Curie Text"
-popup/item_2/id = 2
-popup/item_3/text = "Babbage Text"
-popup/item_3/id = 3
-popup/item_4/text = "Ada Text"
-popup/item_4/id = 4
-popup/item_5/text = "Cushman Code"
-popup/item_5/id = 5
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

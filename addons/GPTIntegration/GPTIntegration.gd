@@ -13,9 +13,9 @@ enum modes {
 var api_key = ""
 var max_tokens = 1024
 var temperature = 0.5
-var url = "https://api.openai.com/v1/completions"
+var url = "https://api.openai.com/v1/chat/completions"
 var headers = ["Content-Type: application/json", "Authorization: Bearer " + api_key]
-var engine = "text-davinachi-003"
+var engine = "gpt-3.5-turbo"
 var chat_dock
 var http_request :HTTPRequest
 var current_mode
@@ -52,20 +52,14 @@ func on_settings_button_down():
 	temperature = float(settings_menu.get_node("HBoxContainer/VBoxContainer2/Temperature").text)
 	var index = settings_menu.get_node("HBoxContainer/VBoxContainer2/OptionButton").selected
 	
-	if engine == "text-davinchi-003":
-		index = 0
+	
+	if index == 0:
+		engine = "gpt-4"
 	elif index == 1:
-		engine = "code-davinci-002"
-	elif index == 2:
-		engine = "text-curie-001"
-	elif index == 3: 
-		engine = "text-babbage-001"
-	elif index == 4:
-		engine = "text-ada-001"
-	elif index == 5:
-		engine = "code-cushman-002"
-		
+		engine = "gpt-3.5-turbo"
+	print(engine)
 	settings_menu_close()
+	save_settings()
 	pass
 
 func settings_menu_close():
@@ -82,18 +76,10 @@ func set_settings(api_key, maxtokens, temp, engine):
 	settings_menu.get_node("HBoxContainer/VBoxContainer2/Temperature").text = str(temp)
 	var id = 0
 	
-	if engine == "text-davinchi-003":
-		id = 0
-	elif  engine == "code-davinci-002":
-		id = 1
-	elif engine == "text-curie-001":
-		id = 2
-	elif engine == "text-babbage-001":
-		id = 3
-	elif engine == "text-ada-001":
-		id = 4
-	elif engine == "code-cushman-002":
-		id = 5
+	if engine == "gpt-4":
+		id == 0
+	elif engine == "gpt-3.5-turbo":
+		id == 1
 		
 	settings_menu.get_node("HBoxContainer/VBoxContainer2/OptionButton").select(id)
 
@@ -118,12 +104,18 @@ func _on_chat_button_down():
 		add_to_chat("Me: " + prompt)
 		call_GPT(prompt)
 		
+		
 func call_GPT(prompt):
 	var body = JSON.new().stringify({
-		"prompt": prompt,
+		"messages" : [
+		{
+			"role": "user",
+			"content": prompt
+		}
+			],
 		"temperature": temperature,
 		"max_tokens": max_tokens,
-		"model": "text-davinci-003"
+		"model": engine
 	})
 	var error = http_request.request(url, ["Content-Type: application/json", "Authorization: Bearer " + api_key], HTTPClient.METHOD_POST, body)
 	
@@ -172,11 +164,11 @@ func _on_request_completed(result, responseCode, headers, body):
 		printt("Response is not a Dictionary", headers)
 		return
 	
-	var newStr = response.choices[0].text
+	var newStr = response.choices[0].message.content
 	if current_mode == modes.Chat:
 		add_to_chat("GPT: " + newStr)
 	elif current_mode == modes.Summarise:
-		var str = response.choices[0].text.replace("\n" , "")
+		var str = response.choices[0].message.content.replace("\n" , "")
 		newStr = "# "
 		var lineLength = 50
 		var currentLineLength = 0
